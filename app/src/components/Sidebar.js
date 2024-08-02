@@ -21,17 +21,23 @@ function Sidebar() {
         <ul className="sidebar-nav">
           <li className="sidebar-item">
             <a href="#" className="sidebar-link">
-              <i class="bi bi-person-circle"></i>
-              <span>Profile</span>
+              <i class="bi bi-grid-1x2-fill"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li className="sidebar-item">
+            <a href="#" className="sidebar-link">
+              <i class="bi bi-people-fill"></i>
+              <span>Patients</span>
             </a>
           </li>
           <li className="sidebar-item">
             <a href="#" className="sidebar-link">
               <i class="bi bi-list-task"></i>
-              <span>Task</span>
+              <span>Appointments</span>
             </a>
           </li>
-          <li className="sidebar-item">
+          {/* <li className="sidebar-item">
             <a
               href="#"
               className="sidebar-link collapsed has-dropdown"
@@ -59,8 +65,8 @@ function Sidebar() {
                 </a>
               </li>
             </ul>
-          </li>
-          <li className="sidebar-item">
+          </li> */}
+          {/* <li className="sidebar-item">
             <a
               href="#"
               className="sidebar-link collapsed has-dropdown"
@@ -105,17 +111,11 @@ function Sidebar() {
                 </ul>
               </li>
             </ul>
-          </li>
+          </li> */}
           <li className="sidebar-item">
             <a href="#" className="sidebar-link">
-              <i className="lni lni-popup"></i>
-              <span>Notification</span>
-            </a>
-          </li>
-          <li className="sidebar-item">
-            <a href="#" className="sidebar-link">
-              <i className="lni lni-cog"></i>
-              <span>Setting</span>
+              <i class="bi bi-bandaid"></i>
+              <span>Treatments</span>
             </a>
           </li>
         </ul>
