@@ -119,6 +119,12 @@ function Sidebar() {
               <span>Treatments</span>
             </Link>
           </li>
+          <li className="sidebar-item">
+            <Link to="/payment" className="sidebar-link">
+              <i class="bi bi-credit-card"></i>
+              <span>Payment</span>
+            </Link>
+          </li>
         </ul>
         {/* <div className="sidebar-footer">
           <a href="#" className="sidebar-link">

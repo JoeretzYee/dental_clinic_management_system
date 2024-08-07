@@ -1,8 +1,9 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import Appointments from "./Appointments";
 import Dashboard from "./Dashboard";
 import Patients from "./Patients";
-import Appointments from "./Appointments";
+import Payment from "./Payment";
 import Treatments from "./Treatments";
 
 function Main() {
@@ -16,6 +17,7 @@ function Main() {
           <Route path="/patients" element={<Patients />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/treatments" element={<Treatments />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </div>
     </div>

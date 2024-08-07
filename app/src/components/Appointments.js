@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import {
-  db,
-  collection,
   addDoc,
-  getDocs,
-  doc,
+  collection,
+  db,
   deleteDoc,
+  doc,
+  getDocs,
   updateDoc,
 } from "../firebase.js";
-import Swal from "sweetalert2";
+import "./Appointments.css";
 function Appointments() {
   //states
   const [showModal, setShowModal] = useState(false);
@@ -232,62 +233,64 @@ function Appointments() {
                   <td>{formatTime(appointment.time)}</td>
                   <td>{appointment.status}</td>
                   <td>
-                    {appointment.status === "pending" && (
-                      <>
-                        <button
-                          className="btn btn-sm btn-warning"
-                          onClick={() =>
-                            updateStatus(appointment.id, "ongoing")
-                          }
-                        >
-                          Ongoing
-                        </button>{" "}
-                        &nbsp;
+                    <div className="appointmentButtonsContainer">
+                      {appointment.status === "pending" && (
+                        <>
+                          <button
+                            className="btn btn-sm btn-warning"
+                            onClick={() =>
+                              updateStatus(appointment.id, "ongoing")
+                            }
+                          >
+                            Ongoing
+                          </button>{" "}
+                          &nbsp;
+                          <button
+                            className="btn btn-sm btn-success"
+                            onClick={() => updateStatus(appointment.id, "done")}
+                          >
+                            Done
+                          </button>
+                        </>
+                      )}
+                      {appointment.status === "ongoing" && (
                         <button
                           className="btn btn-sm btn-success"
                           onClick={() => updateStatus(appointment.id, "done")}
                         >
                           Done
                         </button>
-                      </>
-                    )}
-                    {appointment.status === "ongoing" && (
+                      )}
+                      &nbsp;
+                      <button
+                        className="btn btn-sm btn-danger"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Delete Button"
+                        onClick={() => handleDeleteAppointment(appointment.id)}
+                      >
+                        <i className="bi bi-trash bi-danger"></i>
+                      </button>{" "}
+                      &nbsp;
                       <button
                         className="btn btn-sm btn-success"
-                        onClick={() => updateStatus(appointment.id, "done")}
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Edit Button"
+                        onClick={() => handleEdit(appointment)}
                       >
-                        Done
+                        <i className="bi bi-pencil-square"></i>
+                      </button>{" "}
+                      &nbsp;
+                      <button
+                        className="btn btn-sm btn-primary"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="View Patient Button"
+                      >
+                        <i className="bi bi-eye-fill"></i>
                       </button>
-                    )}
-                    &nbsp;
-                    <button
-                      className="btn btn-sm btn-danger"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="Delete Button"
-                      onClick={() => handleDeleteAppointment(appointment.id)}
-                    >
-                      <i className="bi bi-trash bi-danger"></i>
-                    </button>{" "}
-                    &nbsp;
-                    <button
-                      className="btn btn-sm btn-success"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="Edit Button"
-                      onClick={() => handleEdit(appointment)}
-                    >
-                      <i className="bi bi-pencil-square"></i>
-                    </button>{" "}
-                    &nbsp;
-                    <button
-                      className="btn btn-sm btn-primary"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="View Patient Button"
-                    >
-                      <i className="bi bi-eye-fill"></i>
-                    </button>
+                    </div>
                   </td>
                 </tr>
               );

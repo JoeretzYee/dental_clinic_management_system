@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import {
-  db,
-  collection,
   addDoc,
-  getDocs,
-  doc,
+  collection,
+  db,
   deleteDoc,
+  doc,
+  getDocs,
   updateDoc,
 } from "../firebase.js";
-import Swal from "sweetalert2";
 
 function Treatments() {
   const [treatmentData, setTreatmentData] = useState({
@@ -174,7 +174,13 @@ function Treatments() {
             {filteredTreatments.map((treatment) => (
               <tr key={treatment.id}>
                 <td>{treatment.name}</td>
-                <td>{treatment.cost}</td>
+                <td>
+                  ₱
+                  {treatment.cost
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </td>
+                <td>{treatment.description}</td>
                 <td>{treatment.description}</td>
                 <td>
                   <button
