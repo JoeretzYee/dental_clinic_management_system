@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Main from "./Main";
 
 function Sidebar() {
@@ -20,22 +21,22 @@ function Sidebar() {
         </div>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
-            <a href="#" className="sidebar-link">
+            <Link to="/" className="sidebar-link">
               <i class="bi bi-grid-1x2-fill"></i>
               <span>Dashboard</span>
-            </a>
+            </Link>
           </li>
           <li className="sidebar-item">
-            <a href="#" className="sidebar-link">
+            <Link to="/patients" className="sidebar-link">
               <i class="bi bi-people-fill"></i>
               <span>Patients</span>
-            </a>
+            </Link>
           </li>
           <li className="sidebar-item">
-            <a href="#" className="sidebar-link">
+            <Link to="/appointments" className="sidebar-link">
               <i class="bi bi-list-task"></i>
               <span>Appointments</span>
-            </a>
+            </Link>
           </li>
           {/* <li className="sidebar-item">
             <a
@@ -113,18 +114,18 @@ function Sidebar() {
             </ul>
           </li> */}
           <li className="sidebar-item">
-            <a href="#" className="sidebar-link">
+            <Link to="/treatments" className="sidebar-link">
               <i class="bi bi-bandaid"></i>
               <span>Treatments</span>
-            </a>
+            </Link>
           </li>
         </ul>
-        <div className="sidebar-footer">
+        {/* <div className="sidebar-footer">
           <a href="#" className="sidebar-link">
             <i className="lni lni-exit"></i>
             <span>Logout</span>
           </a>
-        </div>
+        </div> */}
       </aside>
       <Main />
     </div>
