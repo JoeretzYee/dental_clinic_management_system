@@ -101,33 +101,6 @@ function Patients() {
     setPatientData(patient);
     setShowModal(true);
   };
-  // hanlde add patient
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const docRef = await addDoc(collection(db, "patients"), patientData);
-  //     console.log("Document written with ID: ", docRef.id);
-  //     Swal.fire("Success!", "The patient added succesfully.", "success");
-  //     handleClose(); // Close the modal after submission
-  //     setPatientData({
-  //       name: "",
-  //       address: "",
-  //       number: "",
-  //       gender: "",
-  //       dob: "",
-  //       allergies: "n/a",
-  //     });
-  //     // Fetch updated patients list
-  //     const querySnapshot = await getDocs(collection(db, "patients"));
-  //     const patientsList = querySnapshot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     }));
-  //     setPatients(patientsList);
-  //   } catch (e) {
-  //     console.error("Error adding document: ", e);
-  //   }
-  // };
 
   //handle delete patient
   const handleDelete = async (id) => {
@@ -235,38 +208,6 @@ function Patients() {
                 </td>
               </tr>
             ))}
-            {/* {patients.map((patient) => (
-              <tr key={patient.id}>
-                <td>{patient.name}</td>
-                <td>{patient.address}</td>
-                <td>{patient.number}</td>
-                <td>{patient.gender}</td>
-                <td>{patient.dob}</td>
-                <td>{patient.allergies}</td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(patient.id)}
-                  >
-                    <i className="bi bi-trash bi-danger"></i>
-                  </button>{" "}
-                  &nbsp;
-                  <button
-                    className="btn btn-sm btn-success"
-                    onClick={() => handleEdit(patient)}
-                  >
-                    <i class="bi bi-pencil-square"></i>
-                  </button>{" "}
-                  &nbsp;{" "}
-                  <button
-                    className="btn btn-sm btn-primary"
-                    onClick={() => handleEdit(patient)}
-                  >
-                    <i class="bi bi-eye-fill"></i>
-                  </button>
-                </td>
-              </tr>
-            ))} */}
           </tbody>
         </table>
       </div>

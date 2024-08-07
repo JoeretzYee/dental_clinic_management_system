@@ -15,9 +15,9 @@ function Sidebar() {
           <button className="toggle-btn" type="button" onClick={handleToggle}>
             <i class="bi bi-grid"></i>
           </button>
-          <div className="sidebar-logo">
+          {/* <div className="sidebar-logo">
             <a href="#"></a>
-          </div>
+          </div> */}
         </div>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
