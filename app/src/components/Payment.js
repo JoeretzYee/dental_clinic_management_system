@@ -4,11 +4,12 @@ import Swal from "sweetalert2";
 
 function Payment() {
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [selectedTreatment, setSelectedTreatment] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [selectedTreatments, setSelectedTreatments] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
+  const [formattedAmountPaid, setFormattedAmountPaid] = useState("0");
   const [discount, setDiscount] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+  const [formattedTotalCost, setFormattedTotalCost] = useState("0");
   const [patients, setPatients] = useState([]);
   const [treatments, setTreatments] = useState([]);
   const [patientSearch, setPatientSearch] = useState("");
@@ -39,30 +40,52 @@ function Payment() {
     fetchTreatments();
   }, []);
 
-  const handleTreatmentChange = (e) => {
-    const treatment = treatments.find((t) => t.id === e.target.value);
-    setSelectedTreatment(treatment);
-    calculateTotalCost(treatment, quantity, discount);
+  const handleTreatmentChange = (e, treatment) => {
+    const { checked } = e.target;
+    setSelectedTreatments((prev) =>
+      checked
+        ? [...prev, { ...treatment, quantity: 1 }]
+        : prev.filter((t) => t.id !== treatment.id)
+    );
   };
 
-  const handleQuantityChange = (e) => {
+  const handleQuantityChange = (e, treatmentId) => {
     const qty = parseInt(e.target.value, 10);
-    setQuantity(qty);
-    calculateTotalCost(selectedTreatment, qty, discount);
+    setSelectedTreatments((prev) =>
+      prev.map((t) => (t.id === treatmentId ? { ...t, quantity: qty } : t))
+    );
   };
 
   const handleDiscountChange = (e) => {
-    const disc = parseFloat(e.target.value);
+    const disc = e.target.value === "" ? 0 : parseFloat(e.target.value);
     setDiscount(disc);
-    calculateTotalCost(selectedTreatment, quantity, disc);
+    calculateTotalCost(selectedTreatments, disc);
   };
 
-  const calculateTotalCost = (treatment, qty, disc) => {
-    if (treatment) {
-      const cost = treatment.cost * qty;
-      const total = cost - (cost * disc) / 100;
+  const calculateTotalCost = (treatments, disc) => {
+    if (treatments.length > 0) {
+      const cost = treatments.reduce(
+        (total, treatment) =>
+          total + Number(treatment.cost) * treatment.quantity,
+        0
+      );
+      const total = cost - (cost * (isNaN(disc) ? 0 : disc)) / 100;
       setTotalCost(total);
+      setFormattedTotalCost(formatNumberWithCommas(total.toFixed(2)));
     }
+  };
+
+  const handleAmountPaidChange = (e) => {
+    const value = e.target.value.replace(/,/g, "");
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue) || value === "") {
+      setAmountPaid(value === "" ? 0 : parsedValue);
+      setFormattedAmountPaid(value === "" ? "" : formatNumberWithCommas(value));
+    }
+  };
+
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const handleSubmit = async (e) => {
@@ -71,9 +94,11 @@ function Payment() {
     try {
       const isFullyPaid = amountPaid >= totalCost;
       await addDoc(collection(db, "payments"), {
-        patientId: selectedPatient,
-        treatmentId: selectedTreatment.id,
-        quantity,
+        patient: selectedPatient,
+        treatments: selectedTreatments.map((t) => ({
+          name: t.name,
+          quantity: t.quantity,
+        })),
         amountPaid,
         discount,
         totalCost,
@@ -81,7 +106,7 @@ function Payment() {
         isFullyPaid,
       });
       console.log("Payment successfully added!");
-      Swal.fire("Success!", `Payment  Successfull.`, "success");
+      Swal.fire("Success!", `Payment Successfull.`, "success");
     } catch (error) {
       console.error("Error adding payment: ", error);
       Swal.fire("Error!", "Payment Error", "error");
@@ -95,6 +120,10 @@ function Payment() {
   const filteredTreatments = treatments.filter((treatment) =>
     treatment.name.toLowerCase().includes(treatmentSearch.toLowerCase())
   );
+
+  useEffect(() => {
+    calculateTotalCost(selectedTreatments, discount);
+  }, [selectedTreatments, discount]);
 
   return (
     <div>
@@ -124,7 +153,7 @@ function Payment() {
             >
               <option value="">Select Patient</option>
               {filteredPatients.map((patient) => (
-                <option key={patient.id} value={patient.id}>
+                <option key={patient.id} value={patient.name}>
                   {patient.name}
                 </option>
               ))}
@@ -145,35 +174,42 @@ function Payment() {
             <label htmlFor="treatment" className="form-label mt-2">
               Treatment
             </label>
-            <select
-              className="form-select"
-              id="treatment"
-              onChange={handleTreatmentChange}
-              required
-            >
-              <option value="">Select Treatment</option>
+            <div id="treatment">
               {filteredTreatments.map((treatment) => (
-                <option key={treatment.id} value={treatment.id}>
-                  {treatment.name}
-                </option>
+                <div key={treatment.id} className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value={treatment.id}
+                    id={`treatment-${treatment.id}`}
+                    onChange={(e) => handleTreatmentChange(e, treatment)}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor={`treatment-${treatment.id}`}
+                  >
+                    {treatment.name}
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id={`quantity-${treatment.id}`}
+                    value={
+                      selectedTreatments.find((t) => t.id === treatment.id)
+                        ?.quantity || 1
+                    }
+                    onChange={(e) => handleQuantityChange(e, treatment.id)}
+                    min="1"
+                    style={{
+                      display: "inline",
+                      width: "auto",
+                      marginLeft: "10px",
+                    }}
+                  />
+                </div>
               ))}
-            </select>
+            </div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="quantity" className="form-label">
-              Quantity
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="quantity"
-              value={quantity}
-              onChange={handleQuantityChange}
-              min="1"
-              required
-            />
-          </div>
-
           <div className="mb-3">
             <label htmlFor="discount" className="form-label">
               Discount (%)
@@ -193,10 +229,10 @@ function Payment() {
               Total Cost
             </label>
             <input
-              type="number"
+              type="text"
               className="form-control"
               id="totalCost"
-              value={totalCost.toFixed(2)}
+              value={formattedTotalCost}
               readOnly
             />
           </div>
@@ -205,12 +241,11 @@ function Payment() {
               Amount Paid
             </label>
             <input
-              type="number"
+              type="text"
               className="form-control"
               id="amountPaid"
-              value={amountPaid}
-              onChange={(e) => setAmountPaid(e.target.value)}
-              min="0"
+              value={formattedAmountPaid}
+              onChange={handleAmountPaidChange}
               required
             />
           </div>
