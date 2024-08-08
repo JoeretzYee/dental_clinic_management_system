@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   db,
   collection,
@@ -12,6 +14,7 @@ import Swal from "sweetalert2";
 import "./Patients.css";
 
 function Patients() {
+  const navigate = useNavigate();
   const [patientData, setPatientData] = useState({
     name: "",
     address: "",
@@ -101,7 +104,10 @@ function Patients() {
     setPatientData(patient);
     setShowModal(true);
   };
-
+  //handle navigate route
+  const handleViewDetails = (id) => {
+    navigate(`/patient/${id}`); // Navigate to PatientDetails with patient ID
+  };
   //handle delete patient
   const handleDelete = async (id) => {
     // Show confirmation dialog
@@ -201,7 +207,7 @@ function Patients() {
                   &nbsp;
                   <button
                     className="btn btn-sm btn-primary"
-                    onClick={() => handleEdit(patient)}
+                    onClick={() => handleViewDetails(patient.id)}
                   >
                     <i className="bi bi-eye-fill"></i>
                   </button>

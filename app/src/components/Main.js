@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard";
 import Patients from "./Patients";
 import Payment from "./Payment";
 import Treatments from "./Treatments";
+import PatientDetails from "./PatientDetails";
 
 function Main() {
   return (
@@ -15,6 +16,7 @@ function Main() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/patients" element={<Patients />} />
+          <Route path="/patient/:id" element={<PatientDetails />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/treatments" element={<Treatments />} />
           <Route path="/payment" element={<Payment />} />
