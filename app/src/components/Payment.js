@@ -93,7 +93,9 @@ function Payment() {
     e.preventDefault();
     const db = getFirestore();
     try {
-      const isFullyPaid = amountPaid >= totalCost;
+      const remainingBalance = totalCost - amountPaid;
+      const isFullyPaid = remainingBalance <= 0;
+
       await addDoc(collection(db, "payments"), {
         patient: selectedPatient,
         treatments: selectedTreatments.map((t) => ({
@@ -103,16 +105,31 @@ function Payment() {
         amountPaid,
         discount,
         totalCost,
+        remainingBalance,
         timestamp: new Date(),
         isFullyPaid,
       });
+
       console.log("Payment successfully added!");
-      Swal.fire("Success!", `Payment Successfull.`, "success");
+      Swal.fire("Success!", `Payment Successful.`, "success");
+
+      // Optionally reset the form or redirect
+      setSelectedPatient(null);
+      setSelectedTreatments([]);
+      setAmountPaid(0);
+      setFormattedAmountPaid("0");
+      setDiscount(0);
+      setTotalCost(0);
+      setFormattedTotalCost("0");
     } catch (error) {
       console.error("Error adding payment: ", error);
       Swal.fire("Error!", "Payment Error", "error");
     }
   };
+
+  useEffect(() => {
+    calculateTotalCost(selectedTreatments, discount);
+  }, [selectedTreatments, discount]);
 
   const filteredPatients = patients.filter((patient) =>
     patient.name.toLowerCase().includes(patientSearch.toLowerCase())
@@ -121,10 +138,6 @@ function Payment() {
   const filteredTreatments = treatments.filter((treatment) =>
     treatment.name.toLowerCase().includes(treatmentSearch.toLowerCase())
   );
-
-  useEffect(() => {
-    calculateTotalCost(selectedTreatments, discount);
-  }, [selectedTreatments, discount]);
 
   return (
     <div>
