@@ -1,6 +1,7 @@
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import "./Payments.css";
 
 function Payment() {
   const [selectedPatient, setSelectedPatient] = useState(null);
@@ -174,7 +175,7 @@ function Payment() {
             <label htmlFor="treatment" className="form-label mt-2">
               Treatment
             </label>
-            <div id="treatment">
+            <div id="treatment" className="scrollable-treatments">
               {filteredTreatments.map((treatment) => (
                 <div key={treatment.id} className="form-check">
                   <input
