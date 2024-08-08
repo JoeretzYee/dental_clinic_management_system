@@ -146,11 +146,11 @@ function PatientDetails() {
         <h1 className="text-center">Payment History</h1>
         <div className="col-md-12">
           {paymentHistory.length > 0 ? (
-            <table className="table table-striped">
+            <table className="table table-responsive">
               <thead>
                 <tr>
                   <th>Date</th>
-
+                  <th>Treatment</th>
                   <th>Discount</th>
                   <th>Total Cost</th>
                   <th>Amount Paid</th>
@@ -167,7 +167,11 @@ function PatientDetails() {
                       ).toLocaleDateString()}
                     </td>
                     {/* <td>{Number(payment.amountPaid).toFixed(2)}</td> */}
-
+                    {payment.treatments && payment.treatments.length > 0
+                      ? payment.treatments.map((treatment, index) => (
+                          <span key={index}>{treatment.name}</span>
+                        ))
+                      : "N/A"}
                     <td>{payment.discount}%</td>
                     {/* <td>{payment.totalCost.toFixed(2)}</td> */}
                     <td>
