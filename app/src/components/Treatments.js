@@ -181,7 +181,7 @@ function Treatments() {
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </td>
                 <td>{treatment.description}</td>
-                <td>{treatment.description}</td>
+
                 <td>
                   <button
                     className="btn btn-sm btn-danger"
